@@ -1,4 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fellow Dashboard
+
+An all in one place you could stay in during your fellowship.
+
+# 💡 The idea
+During the fellowship, you have multiple people to meet, multiple tasks to do, multiple platforms to do all this at. The first two are fun but so many platforms not so much. But what if we could give you one platform for all? Have your meeting schedule, your Github discussions, Github stats, LMS, Topic box everything in one place? Then we have exactly what you(we) need!
+
+# ⚙️ Features planned
+A dashboard which would have the following "widgets":
+- [ ] Welcome page with Fellowship details
+- [ ] Github stats with all the issues and PRs recently made
+- [ ] A calendar with your schedule and events lined up
+- [ ] A Github discussions embed so you can post your stand up notes
+- [ ] A link to the LMS(Trainual)
+- [ ] A link to Topic box for clear communication with your pod
+<br/>... more coming soon
+
+# 📚 Tech stack
+- <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"></code> Python
+- <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/git/git.png"></code> GIT
+- <code><img height="35" src="https://github.com/edent/SuperTinyIcons/blob/master/images/svg/github.svg"></code> Github
+- <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/flask/flask.png"></code> Flask
+- <code><img height="35" src="https://github.com/edent/SuperTinyIcons/blob/master/images/svg/react.svg"></code> React
 
 ## Getting Started
 
