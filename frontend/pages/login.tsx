@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/client";
 import { FaGithub } from "react-icons/fa";
 import {
   Button,
@@ -12,7 +12,7 @@ import React from "react";
 import Sidebar from "../components/sidebar";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const [session, loading] = useSession();
 
   return (
     <>

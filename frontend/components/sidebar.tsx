@@ -25,7 +25,7 @@ import { GoRepo, GoStar } from "react-icons/go";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/client";
 import NextLink from "next/link";
 
 import SocialCard from "../components/socialcard";
@@ -56,7 +56,7 @@ export default function Sidebar({
   githubData: any;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: session } = useSession();
+  const [session, loading] = useSession();
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
