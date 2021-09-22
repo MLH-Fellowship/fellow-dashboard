@@ -11,6 +11,7 @@ import {
   createIcon,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import Sidebar from "../components/sidebar";
 
 export default function HomePage() {
   return (
@@ -23,71 +24,73 @@ export default function HomePage() {
         <title>FellowSpot</title>
       </Head>
 
-      <Container maxW={"3xl"}>
-        <Stack
-          as={Box}
-          textAlign={"center"}
-          spacing={{ base: 8, md: 14 }}
-          py={{ base: 20, md: 36 }}
-        >
-          <Heading
-            fontWeight={600}
-            fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
-            lineHeight={"110%"}
-          >
-            Everything you need <br />
-            <Text as={"span"} color={"green.400"}>
-              as an MLH Fellow, in one place.
-            </Text>
-          </Heading>
-          <Text color={"gray.500"}>
-            The MLH Fellowship has a lot of information that you need to keep up
-            with on a daily basis. This aims to solve this problem by having the
-            most important information you need, in one place.
-          </Text>
+      <Sidebar pageTitle="Home" githubData={undefined}>
+        <Container maxW={"3xl"}>
           <Stack
-            direction={"column"}
-            spacing={3}
-            align={"center"}
-            alignSelf={"center"}
-            position={"relative"}
+            as={Box}
+            textAlign={"center"}
+            spacing={{ base: 8, md: 14 }}
+            py={{ base: 20, md: 36 }}
           >
-            <Link href="/login" passHref>
-              <Button
-                colorScheme={"green"}
-                bg={"green.400"}
-                rounded={"full"}
-                px={6}
-                _hover={{
-                  bg: "green.500",
-                }}
-              >
-                Get Started
-              </Button>
-            </Link>
-            <Box>
-              <Icon
-                as={Arrow}
-                color={useColorModeValue("gray.800", "gray.300")}
-                w={71}
-                position={"absolute"}
-                right={-71}
-                top={"10px"}
-              />
-              <Text
-                fontSize={"lg"}
-                fontFamily={"Caveat"}
-                position={"absolute"}
-                right={"-125px"}
-                top={"-15px"}
-                transform={"rotate(10deg)"}
-              >
-                Completely Free!
+            <Heading
+              fontWeight={600}
+              fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
+              lineHeight={"110%"}
+            >
+              Everything you need <br />
+              <Text as={"span"} color={"green.400"}>
+                as an MLH Fellow, in one place.
               </Text>
-            </Box>
+            </Heading>
+            <Text color={"gray.500"}>
+              The MLH Fellowship has a lot of information that you need to keep
+              up with on a daily basis. This aims to solve this problem by
+              having the most important information you need, in one place.
+            </Text>
+            <Stack
+              direction={"column"}
+              spacing={3}
+              align={"center"}
+              alignSelf={"center"}
+              position={"relative"}
+            >
+              <Link href="/login" passHref>
+                <Button
+                  colorScheme={"green"}
+                  bg={"green.400"}
+                  rounded={"full"}
+                  px={6}
+                  _hover={{
+                    bg: "green.500",
+                  }}
+                >
+                  Get Started
+                </Button>
+              </Link>
+              <Box>
+                <Icon
+                  as={Arrow}
+                  color={useColorModeValue("gray.800", "gray.300")}
+                  w={71}
+                  position={"absolute"}
+                  right={-71}
+                  top={"10px"}
+                />
+                <Text
+                  fontSize={"lg"}
+                  fontFamily={"Caveat"}
+                  position={"absolute"}
+                  right={"-125px"}
+                  top={"-15px"}
+                  transform={"rotate(10deg)"}
+                >
+                  Completely Free!
+                </Text>
+              </Box>
+            </Stack>
           </Stack>
-        </Stack>
-      </Container>
+        </Container>
+      </Sidebar>
     </>
   );
 }
