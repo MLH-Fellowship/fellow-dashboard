@@ -15,15 +15,20 @@ export default NextAuth({
   },
 
   callbacks: {
+    /**
+     * @param  {object}  token     Decrypted JSON Web Token
+     * @param  {object}  user      User object      (only available on sign in)
+     * @param  {object}  account   Provider account (only available on sign in)
+     * @param  {object}  profile   Provider profile (only available on sign in)
+     * @return {object}            JSON Web Token that will be saved
+     */
     async redirect(url, baseUrl) {
       return "/";
     },
     async jwt(token, user, account, profile, isNewUser) {
       // Add access_token to the token right after signin
-      if (account) {
-        if (account.accessToken) {
-          token.accessToken = account.accessToken;
-        }
+      if (account?.accessToken) {
+        token.accessToken = account.accessToken;
       }
       return token;
     },
