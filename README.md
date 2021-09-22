@@ -31,7 +31,7 @@ The details should look something like this:
 
 On creating the OAuth app on GitHub, you need to set the `GITHUB_ID` in the `.env` file as the Client ID you see in the GitHub OAuth App in your account, and the `GITHUB_SECRET` to the Client Secret that you generate. Refer to the image below for more details
 
-![GitHub OAuth App Creds](images/githubClient.png?raw=True)
+![GitHub OAuth App Creds](images/githubCLient.png?raw=True)
 
 After adding the GITHUB_ID and GITHUB_SECRET to your `.env` create two more values called `AUTH_SECRET` and `JWT_SECRET` which you can generate yourself as any
 string which will be used to authenticate with Github.
