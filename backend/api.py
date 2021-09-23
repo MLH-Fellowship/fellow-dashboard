@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import jwt
+import requests
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,10 +23,30 @@ class Scratchpad(Resource):
         return {args["id"]: db[args["id"]]}
 
 
-api.add_resource(Scratchpad, "/scratchpad")
+class GithubPodList(Resource):
+    def get(self, oAuthToken):
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"token {oAuthToken}",
+        }
+        response = requests.get(
+            "https://api.github.com/orgs/MLH-Fellowship/teams/mlh-fellows-batch-4/teams",
+            headers=headers,
+        )
+        print(headers)
+        print(response.json())
+        return [
+            {
+                "name": pod["name"],
+                "description": pod["description"],
+                "slug": pod["slug"],
+            }
+            for pod in response.json()
+        ]
 
-# example command
-# curl localhost:5000/scratchpad --data "id=yo&text=hi"
+
+api.add_resource(Scratchpad, "/scratchpad")
+api.add_resource(GithubPodList, "/github/list-pods/<string:oAuthToken>")
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
