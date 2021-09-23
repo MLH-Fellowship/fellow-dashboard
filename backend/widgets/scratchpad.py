@@ -9,9 +9,9 @@ class Scratchpad(Resource):
 
     def put(self, id):
         args = scratchpad_parser.parse_args()
-        self.db[args["id"]] = args["text"]
+        self.db[id] = args["text"]
         print(self.db)
-        return {args["id"]: self.db[args["id"]]}
+        return {id: self.db[id]}
 
     def get(self, id):
-        return {id: self.db.get("id", "")}
+        return {id: self.db.get(id, "")}
