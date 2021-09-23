@@ -1,7 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/client";
+import { Stack, Container } from "@chakra-ui/react";
+
 import Sidebar from "../components/sidebar";
+import Scratchpad from "../components/scratchpad";
 
 export default function Dashboard() {
   const [session, loading] = useSession();
@@ -12,12 +15,14 @@ export default function Dashboard() {
           <title>Dashboard</title>
         </Head>
         <Sidebar pageTitle="Dashboard">
-          <div>
-            <h1>Dashboard</h1>
-            <Link href="/">
-              <a>Home</a>
-            </Link>
-          </div>
+          <Stack spacing={4} direction={["column", "row"]}>
+            <Container backgroundColor="gray.700" padding={5}>
+              <Scratchpad />
+            </Container>
+            <Container backgroundColor="gray.700" padding={5}>
+              <Scratchpad />
+            </Container>
+          </Stack>
         </Sidebar>
       </>
     );
