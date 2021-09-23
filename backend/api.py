@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, abort
 from flask_cors import CORS
 import jwt
 import requests
@@ -23,6 +23,12 @@ class Scratchpad(Resource):
         return {args["id"]: db[args["id"]]}
 
 
+def handle_github_request_errors(response):
+    if response.status_code == 401:
+        abort(401, message="invalid oauth token")
+    if response.status_code == 404:
+        abort(404, message="resource not found, check request arguments")
+
 class GithubPodList(Resource):
     def get(self, oAuth_token):
         headers = {
@@ -33,6 +39,7 @@ class GithubPodList(Resource):
             "https://api.github.com/orgs/MLH-Fellowship/teams/mlh-fellows-batch-4/teams",
             headers=headers,
         )
+        handle_github_request_errors(response)
         return [
             {
                 "name": pod["name"],
@@ -53,6 +60,7 @@ class GithubDiscussionList(Resource):
             f"https://api.github.com/orgs/MLH-Fellowship/teams/{pod_slug}/discussions",
             headers=headers,
         )
+        handle_github_request_errors(response)
         return [
             {
                 "title": discussion["title"],
