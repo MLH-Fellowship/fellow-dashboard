@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:3001";
 
 const Post = async (data, url) => {
-  const response = await axios.post(`${API_URL}${url}`, data);
+  const response = await axios.put(`${API_URL}${url}`, data);
   return response;
 };
 
