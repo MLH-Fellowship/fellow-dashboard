@@ -10,7 +10,7 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-api.add_resource(Scratchpad, "/scratchpad")
+api.add_resource(Scratchpad, "/scratchpad/<string:id>")
 api.add_resource(GithubPodList, "/github/list-pods/<string:oAuth_token>")
 api.add_resource(
     GithubDiscussionList,
