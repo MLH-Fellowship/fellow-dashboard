@@ -24,7 +24,7 @@ A dashboard which would have the following "widgets":
 
 ## Getting Started
 
-First, run the development server:
+To start the frontend app, run the development server:
 
 ```bash
 cd frontend
@@ -33,6 +33,14 @@ npm run dev
 # or
 yarn dev
 ```
+
+To start the backend app, install the dependencies using `poetry`:
+
+`poetry install`
+
+Then start the app:
+
+`poetry run python api.py`
 
 ### GitHub Authentication
 
