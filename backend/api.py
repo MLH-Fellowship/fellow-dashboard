@@ -44,9 +44,29 @@ class GithubPodList(Resource):
             for pod in response.json()
         ]
 
+class GithubDiscussionList(Resource):
+    def get(self, pod_slug, oAuthToken):
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": f"token {oAuthToken}",
+        }
+        response = requests.get(
+            f"https://api.github.com/orgs/MLH-Fellowship/teams/{pod_slug}/discussions",
+            headers=headers,
+        )
+        print(headers)
+        print(response.json())
+        return [
+            {
+                "title": discussion['title'],
+                "url": discussion['url'],
+            }
+            for discussion in response.json()
+        ]
 
 api.add_resource(Scratchpad, "/scratchpad")
 api.add_resource(GithubPodList, "/github/list-pods/<string:oAuthToken>")
+api.add_resource(GithubDiscussionList, "/github/list-discussions/<string:pod_slug>/<string:oAuthToken>")
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=5000)
