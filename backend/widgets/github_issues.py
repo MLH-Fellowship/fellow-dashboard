@@ -5,7 +5,7 @@ import requests
 
 class GithubIssueList(Resource):
     def get(self, oAuth_token, query_type):
-        if method not in ("assigned", "created", "mentioned", "subscribed"):
+        if query_type not in ("assigned", "created", "mentioned", "subscribed"):
             abort(
                 404,
                 "invalid query type! must be one of 'assigned', 'created', 'mentioned', or 'subscribed'.",
@@ -16,7 +16,7 @@ class GithubIssueList(Resource):
             "Authorization": f"token {oAuth_token}",
         }
         response = requests.get(
-            f"https://api.github.com/orgs/MLH-Fellowship/issues?filter={method}",
+            f"https://api.github.com/orgs/MLH-Fellowship/issues?filter={query_type}",
             headers=headers,
         )
         handle_github_request_errors(response)
