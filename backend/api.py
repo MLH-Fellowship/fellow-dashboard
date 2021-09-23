@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse, abort
 from flask_cors import CORS
-import jwt
 import requests
 
 app = Flask(__name__)
@@ -74,6 +73,7 @@ class GithubDiscussionList(Resource):
 github_standup_parser = reqparse.RequestParser()
 github_standup_parser.add_argument("text", required=True)
 
+
 class GithubViewSubmitLatestStandup(Resource):
     def get(self, pod_slug, oAuth_token):
         headers = {
@@ -122,10 +122,10 @@ class GithubViewSubmitLatestStandup(Resource):
         post_comment_response = requests.post(
             f"https://api.github.com/orgs/MLH-Fellowship/teams/{pod_slug}/discussions/{latest_standup_discussion_number}/comments",
             data=f'{{"body": "{standup_notes}"}}',
-            headers=headers
+            headers=headers,
         )
         handle_github_request_errors(post_comment_response)
-        return {'comment': post_comment_response.json()}
+        return {"comment": post_comment_response.json()}
 
 
 api.add_resource(Scratchpad, "/scratchpad")
