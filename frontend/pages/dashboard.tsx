@@ -11,7 +11,7 @@ export default function Dashboard() {
         <Head>
           <title>Dashboard</title>
         </Head>
-        <Sidebar pageTitle="Dashboard" githubData={undefined}>
+        <Sidebar pageTitle="Dashboard">
           <div>
             <h1>Dashboard</h1>
             <Link href="/">
@@ -24,7 +24,7 @@ export default function Dashboard() {
   }
 
   return (
-    <Sidebar pageTitle="Dashboard" githubData={undefined}>
+    <Sidebar pageTitle="Dashboard">
       <h1>Not Signed In</h1>
     </Sidebar>
   );

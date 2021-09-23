@@ -24,7 +24,7 @@ export default function HomePage() {
         <title>FellowSpot</title>
       </Head>
 
-      <Sidebar pageTitle="Home" githubData={undefined}>
+      <Sidebar pageTitle="Home">
         <Container maxW={"3xl"}>
           <Stack
             as={Box}
