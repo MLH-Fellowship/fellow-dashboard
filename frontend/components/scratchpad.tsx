@@ -27,8 +27,10 @@ const Scratchpad = () => {
     {
       type: "paragraph",
       children: [
+        { text: "# Standup Notes" },
+        { text: "\npsst (you can edit everything here)" },
         {
-          text: "**What did you achieve in the last 24 hours?**:",
+          text: "\n**What did you achieve in the last 24 hours?**:",
         },
         { text: "\n- First" },
         { text: "\n- Second" },

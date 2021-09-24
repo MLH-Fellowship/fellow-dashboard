@@ -35,6 +35,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Dashboard", icon: FiHome, link: "/dashboard" },
+  { name: "Links", icon: FiMenu, link: "/links" },
 ];
 
 const LinkItemsNotLoggedIn: Array<LinkItemProps> = [
