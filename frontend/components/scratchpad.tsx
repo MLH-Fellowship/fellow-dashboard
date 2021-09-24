@@ -1,31 +1,17 @@
 import Prism from "prismjs";
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import { Text, createEditor, Element, Descendant } from "slate";
 import { withHistory } from "slate-history";
 import { css } from "@emotion/css";
 import { Button } from "@chakra-ui/react";
 import { Get, Post } from "../utils/network";
-import { useSession } from "next-auth/client";
-import { encode } from "next-auth/jwt";
+import { useSession, getSession } from "next-auth/client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // eslint-disable-next-line
 Prism.languages.markdown=Prism.languages.extend("markup",{}),Prism.languages.insertBefore("markdown","prolog",{blockquote:{pattern:/^>(?:[\t ]*>)*/m,alias:"punctuation"},code:[{pattern:/^(?: {4}|\t).+/m,alias:"keyword"},{pattern:/``.+?``|`[^`\n]+`/,alias:"keyword"}],title:[{pattern:/\w+.*(?:\r?\n|\r)(?:==+|--+)/,alias:"important",inside:{punctuation:/==+$|--+$/}},{pattern:/(^\s*)#+.+/m,lookbehind:!0,alias:"important",inside:{punctuation:/^#+|#+$/}}],hr:{pattern:/(^\s*)([*-])([\t ]*\2){2,}(?=\s*$)/m,lookbehind:!0,alias:"punctuation"},list:{pattern:/(^\s*)(?:[*+-]|\d+\.)(?=[\t ].)/m,lookbehind:!0,alias:"punctuation"},"url-reference":{pattern:/!?\[[^\]]+\]:[\t ]+(?:\S+|<(?:\\.|[^>\\])+>)(?:[\t ]+(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)))?/,inside:{variable:{pattern:/^(!?\[)[^\]]+/,lookbehind:!0},string:/(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\))$/,punctuation:/^[\[\]!:]|[<>]/},alias:"url"},bold:{pattern:/(^|[^\\])(\*\*|__)(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^\*\*|^__|\*\*$|__$/}},italic:{pattern:/(^|[^\\])([*_])(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^[*_]|[*_]$/}},url:{pattern:/!?\[[^\]]+\](?:\([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?\)| ?\[[^\]\n]*\])/,inside:{variable:{pattern:/(!?\[)[^\]]+(?=\]$)/,lookbehind:!0},string:{pattern:/"(?:\\.|[^"\\])*"(?=\)$)/}}}}),Prism.languages.markdown.bold.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.italic.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.bold.inside.italic=Prism.util.clone(Prism.languages.markdown.italic),Prism.languages.markdown.italic.inside.bold=Prism.util.clone(Prism.languages.markdown.bold); // prettier-ignore
-
-const deserialize = (string) => {
-  // Return a value array of children derived by splitting the string.
-  return string.split("\n").map((line) => {
-    return {
-      children: [{ text: line }],
-    };
-  });
-};
-
-const getScratchpad = async (id) => {
-  const response = await Get(`/scratchpad/${id}`);
-  console.log(response);
-  return response;
-};
 
 const saveScratchpad = async (id) => {
   const content = await localStorage.getItem("content");
@@ -34,11 +20,35 @@ const saveScratchpad = async (id) => {
 };
 
 const Scratchpad = () => {
-  const [value, setValue] = useState<Descendant[]>(initialValue);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [session, loading] = useSession();
-  const testing = getScratchpad(encodeURIComponent(session.user.email));
+  const [value, setValue] = useState<Descendant[]>([
+    {
+      type: "paragraph",
+      children: [
+        {
+          text: "**What did you achieve in the last 24 hours?**:",
+        },
+        { text: "\n- First" },
+        { text: "\n- Second" },
+        { text: "\n**What are your priorities for the next 24 hours?**:" },
+        { text: "\n- First" },
+        { text: "\n- Second" },
+        {
+          text: "\n**Blockers**:",
+        },
+        { text: "\n- First" },
+        { text: "\n- Second" },
+        {
+          text: "\n**Shoutouts**:",
+        },
+        { text: "\n- First" },
+        { text: "\n- Second" },
+      ],
+    },
+  ]);
+  const notify = () => toast("Saved");
   const decorate = useCallback(([node, path]) => {
     const ranges = [];
 
@@ -77,6 +87,20 @@ const Scratchpad = () => {
     return ranges;
   }, []);
 
+  useEffect(() => {
+    async function getScratchpad() {
+      const session = await getSession();
+      const id = btoa(session.user.email);
+      const response = await Get(`/scratchpad/${id}`);
+      const retValue = response.data[id];
+      if (retValue) {
+        setValue(JSON.parse(retValue));
+      }
+    }
+
+    getScratchpad();
+  }, []);
+
   return (
     <>
       <Slate
@@ -99,10 +123,14 @@ const Scratchpad = () => {
       <Button
         colorScheme="gray"
         marginTop={5}
-        onClick={() => saveScratchpad(encodeURIComponent(session.user.email))}
+        onClick={async () => {
+          await saveScratchpad(btoa(session.user.email));
+          notify();
+        }}
       >
         Save
       </Button>
+      <ToastContainer />
     </>
   );
 };
@@ -154,24 +182,5 @@ const Leaf = ({ attributes, children, leaf }) => {
     </span>
   );
 };
-
-const initialValue: Descendant[] = [
-  {
-    type: "paragraph",
-    children: [
-      {
-        text: "Slate is flexible enough to add **decorations** that can format text based on its content. For example, this editor has **Markdown** preview decorations on it, to make it _dead_ simple to make an editor with built-in Markdown previewing.",
-      },
-    ],
-  },
-  {
-    type: "paragraph",
-    children: [{ text: "## Try it out!" }],
-  },
-  {
-    type: "paragraph",
-    children: [{ text: "Try it out for yourself!" }],
-  },
-];
 
 export default Scratchpad;
