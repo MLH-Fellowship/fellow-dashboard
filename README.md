@@ -3,48 +3,32 @@
 An all in one place you could stay in during your fellowship.
 
 # 💡 The idea
+
 During the fellowship, you have multiple people to meet, multiple tasks to do, multiple platforms to do all this at. The first two are fun but so many platforms not so much. But what if we could give you one platform for all? Have your meeting schedule, your Github discussions, Github stats, LMS, Topic box everything in one place? Then we have exactly what you(we) need!
 
 # ⚙️ Features planned
+
 A dashboard which would have the following "widgets":
+
 - [ ] Welcome page with Fellowship details
 - [ ] Github stats with all the issues and PRs recently made
 - [ ] A calendar with your schedule and events lined up
 - [ ] A Github discussions embed so you can post your stand up notes
 - [ ] A link to the LMS(Trainual)
 - [ ] A link to Topic box for clear communication with your pod
-<br/>... more coming soon
+      <br/>... more coming soon
 
 # 📚 Tech stack
+
 - <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"></code> Python
 - <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/git/git.png"></code> GIT
 - <code><img height="35" src="https://github.com/edent/SuperTinyIcons/blob/master/images/svg/github.svg"></code> Github
 - <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/flask/flask.png"></code> Flask
 - <code><img height="35" src="https://github.com/edent/SuperTinyIcons/blob/master/images/svg/react.svg"></code> React
 
-## Getting Started
-
-To start the frontend app, run the development server:
-
-```bash
-cd frontend
-
-npm run dev
-# or
-yarn dev
-```
-
-To start the backend app, install the dependencies using `poetry`:
-
-`poetry install`
-
-Then start the app:
-
-`poetry run python api.py`
-
 ### GitHub Authentication
 
-To get the GitHub authentication to work, you need to create a `.env` file in the `client` directory with the following content
+To get the GitHub authentication to work, you need to create a `.env` file in the `frontend` directory with the following content
 
 ```bash
 GITHUB_ID=<your_github_client_id>
@@ -65,6 +49,39 @@ On creating the OAuth app on GitHub, you need to set the `GITHUB_ID` in the `.en
 
 After adding the GITHUB_ID and GITHUB_SECRET to your `.env` create two more values called `AUTH_SECRET` and `JWT_SECRET` which you can generate yourself as any
 string which will be used to authenticate with Github.
+
+## Getting Started
+
+### Running the App
+
+You can run this app with just one simple command (i.e if you have Docker Compose installed)
+
+```bash
+# Make sure you are in the root directory of the repository
+docker-compose up
+```
+
+Just wait for a minute or two till all containers finish spinning up, then navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Development
+
+To start the frontend app, run the development server:
+
+```bash
+cd frontend
+
+npm run dev
+# or
+yarn dev
+```
+
+To start the backend app, install the dependencies using `poetry`:
+
+`poetry install`
+
+Then start the app:
+
+`poetry run python api.py`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
