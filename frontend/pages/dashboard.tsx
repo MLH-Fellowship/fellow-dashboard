@@ -1,17 +1,8 @@
 import Head from "next/head";
 import { useSession } from "next-auth/client";
-import {
-  Stack,
-  Container,
-  Image,
-  Center,
-  VStack,
-  Text,
-  Spinner,
-} from "@chakra-ui/react";
+import { Stack, Container, Heading, Center, Text } from "@chakra-ui/react";
 import Sidebar from "../components/sidebar";
 import Scratchpad from "../components/scratchpad";
-import IssueCard from "../components/issuecard";
 import Issues from "../components/issues";
 
 export default function Dashboard() {
@@ -23,10 +14,25 @@ export default function Dashboard() {
           <title>Dashboard</title>
         </Head>
         <Sidebar pageTitle="Dashboard">
-          <Stack spacing={4} direction={["column", "row"]}>
-            <Issues />
-            <Container backgroundColor="gray.700" padding={5} borderRadius={20}>
-              <Scratchpad />
+          <Stack spacing={2} direction={["column", "row"]}>
+            <Container>
+              <Center>
+                <Heading>Standup Notes</Heading>
+              </Center>
+              <Center>
+                <Text fontSize="xs">(psst you can edit this)</Text>
+              </Center>
+              <Container
+                padding={5}
+                borderRadius="lg"
+                backgroundColor="gray.700"
+                mt={2}
+              >
+                <Scratchpad />
+              </Container>
+            </Container>
+            <Container>
+              <Issues />
             </Container>
           </Stack>
         </Sidebar>

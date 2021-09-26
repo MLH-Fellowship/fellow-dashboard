@@ -1,7 +1,7 @@
 import Prism from "prismjs";
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Slate, Editable, withReact } from "slate-react";
-import { Text, createEditor } from "slate";
+import { Text, createEditor, Descendant } from "slate";
 import { withHistory } from "slate-history";
 import { css } from "@emotion/css";
 import {
@@ -49,7 +49,7 @@ const saveScratchpad = async (id) => {
   console.log(response);
 };
 
-const initialValue = [
+const initialValue: Descendant[] = [
   {
     type: "paragraph",
     children: [{ text: "**What did you achieve in the last 24 hours?**:" }],
@@ -107,8 +107,8 @@ const Scratchpad = () => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [session, loading] = useSession();
   const [podList, setPodList] = useState([]);
-  const [value, setValue] = useState(initialValue);
-  const notify = () => toast("Saved");
+  const [value, setValue] = useState<Descendant[]>(initialValue);
+  const notify = (message: string) => toast(message);
   const decorate = useCallback(([node, path]) => {
     const ranges = [];
 
@@ -192,7 +192,7 @@ const Scratchpad = () => {
           colorScheme="gray"
           onClick={async () => {
             await saveScratchpad(btoa(session.user.email));
-            notify();
+            notify("Notes saved to Database");
           }}
         >
           Save
@@ -207,7 +207,13 @@ const Scratchpad = () => {
           </MenuButton>
           <MenuList>
             {podList.map((pod) => (
-              <MenuItem key={pod.slug} onClick={() => postStandup(pod.slug)}>
+              <MenuItem
+                key={pod.slug}
+                onClick={() => {
+                  postStandup(pod.slug);
+                  notify("Standup Message Posted!");
+                }}
+              >
                 {pod.name}
               </MenuItem>
             ))}

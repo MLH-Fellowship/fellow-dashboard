@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { VStack, Text, Spinner } from "@chakra-ui/react";
+import { VStack, Heading, Spinner } from "@chakra-ui/react";
 import { getSession } from "next-auth/client";
 import { Get } from "../utils/network";
 import IssueCard from "./issuecard";
@@ -21,9 +21,7 @@ export default function Issues() {
 
   return (
     <VStack>
-      <Text fontSize="xl" fontWeight="800">
-        Issues
-      </Text>
+      <Heading>Issues</Heading>
       {issueData ? (
         issueData
           .slice(0, 3)

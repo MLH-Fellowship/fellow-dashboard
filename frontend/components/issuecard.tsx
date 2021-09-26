@@ -70,7 +70,7 @@ export default function IssueCard({
         </Flex>
       </Flex>
       <Flex ml={5} mr={5} mb={5} mt={2}>
-        <Text>{issueBody}</Text>
+        <Text>{issueBody.substr(0, 80)}...</Text>
       </Flex>
     </Flex>
   );
