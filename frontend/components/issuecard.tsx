@@ -13,7 +13,7 @@ import { GoMilestone } from "react-icons/go";
 function extractRepoName(issueUrl: string) {
   var url = new URL(issueUrl);
   var pathArray = url.pathname.split("/");
-  return pathArray[1] + "/" + pathArray[2];
+  return pathArray[2] + "/" + pathArray[3];
 }
 
 export default function IssueCard({

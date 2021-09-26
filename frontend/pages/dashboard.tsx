@@ -12,7 +12,7 @@ import {
 import Sidebar from "../components/sidebar";
 import Scratchpad from "../components/scratchpad";
 import IssueCard from "../components/issuecard";
-import Discussions from "../components/discussions";
+import Issues from "../components/issues";
 
 export default function Dashboard() {
   const [session, loading] = useSession();
@@ -24,7 +24,7 @@ export default function Dashboard() {
         </Head>
         <Sidebar pageTitle="Dashboard">
           <Stack spacing={4} direction={["column", "row"]}>
-            <Discussions />
+            <Issues />
             <Container backgroundColor="gray.700" padding={5} borderRadius={20}>
               <Scratchpad />
             </Container>

@@ -1,7 +1,7 @@
 import Prism from "prismjs";
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Slate, Editable, withReact } from "slate-react";
-import { Text, createEditor, Element, Descendant } from "slate";
+import { Text, createEditor } from "slate";
 import { withHistory } from "slate-history";
 import { css } from "@emotion/css";
 import {
@@ -107,7 +107,7 @@ const Scratchpad = () => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [session, loading] = useSession();
   const [podList, setPodList] = useState([]);
-  const [value, setValue] = useState<Descendant[]>(initialValue);
+  const [value, setValue] = useState(initialValue);
   const notify = () => toast("Saved");
   const decorate = useCallback(([node, path]) => {
     const ranges = [];

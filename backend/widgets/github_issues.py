@@ -22,13 +22,14 @@ class GithubIssueList(Resource):
         handle_github_request_errors(response)
         return [
             {
-                "repo": issue["repository"]["name"],
                 "number": issue["number"],
                 "title": issue["title"],
-                "url": issue["url"],
-                "labels": [label["name"] for label in issue["labels"]],
-                "assignees": [assignee["login"] for assignee in issue["assignees"]],
-                "created_by": issue["user"]["login"],
+                "html_url": issue["url"],
+                "labels": [{"name": label["name"], "color": label["color"], "id": label["id"]} for label in issue["labels"]],
+                "avatar_url": issue["user"]["avatar_url"],
+                "login": issue["user"]["login"],
+                "body": issue["body"],
+                "id": issue["id"]
             }
             for issue in response.json()
         ]
