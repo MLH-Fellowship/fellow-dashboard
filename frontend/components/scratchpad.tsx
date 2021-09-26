@@ -24,7 +24,7 @@ Prism.languages.markdown=Prism.languages.extend("markup",{}),Prism.languages.ins
 const convertContentToString = (content: any) => {
   let text = "";
   for (const item of content) {
-    text += item.children[0].text;
+    text += "\\n" + item.children[0].text + "  \\n";
   }
   return text;
 };
