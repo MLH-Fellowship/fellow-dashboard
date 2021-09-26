@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse, abort
 from utils.error_handling import handle_github_request_errors
+import requests
 
 github_standup_parser = reqparse.RequestParser()
 github_standup_parser.add_argument("text", required=True)
@@ -49,7 +50,7 @@ class GithubViewSubmitLatestStandup(Resource):
         print(latest_standup_discussion_number)
         if latest_standup_discussion_number == -1:
             abort(404, message="No standup discussion threads found!")
-
+        print(standup_notes)
         post_comment_response = requests.post(
             f"https://api.github.com/orgs/MLH-Fellowship/teams/{pod_slug}/discussions/{latest_standup_discussion_number}/comments",
             data=f'{{"body": "{standup_notes}"}}',

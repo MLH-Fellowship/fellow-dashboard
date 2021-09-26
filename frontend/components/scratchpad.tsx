@@ -4,7 +4,15 @@ import { Slate, Editable, withReact } from "slate-react";
 import { Text, createEditor, Element, Descendant } from "slate";
 import { withHistory } from "slate-history";
 import { css } from "@emotion/css";
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  HStack,
+} from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Get, Post } from "../utils/network";
 import { useSession, getSession } from "next-auth/client";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,43 +21,93 @@ import "react-toastify/dist/ReactToastify.css";
 // eslint-disable-next-line
 Prism.languages.markdown=Prism.languages.extend("markup",{}),Prism.languages.insertBefore("markdown","prolog",{blockquote:{pattern:/^>(?:[\t ]*>)*/m,alias:"punctuation"},code:[{pattern:/^(?: {4}|\t).+/m,alias:"keyword"},{pattern:/``.+?``|`[^`\n]+`/,alias:"keyword"}],title:[{pattern:/\w+.*(?:\r?\n|\r)(?:==+|--+)/,alias:"important",inside:{punctuation:/==+$|--+$/}},{pattern:/(^\s*)#+.+/m,lookbehind:!0,alias:"important",inside:{punctuation:/^#+|#+$/}}],hr:{pattern:/(^\s*)([*-])([\t ]*\2){2,}(?=\s*$)/m,lookbehind:!0,alias:"punctuation"},list:{pattern:/(^\s*)(?:[*+-]|\d+\.)(?=[\t ].)/m,lookbehind:!0,alias:"punctuation"},"url-reference":{pattern:/!?\[[^\]]+\]:[\t ]+(?:\S+|<(?:\\.|[^>\\])+>)(?:[\t ]+(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)))?/,inside:{variable:{pattern:/^(!?\[)[^\]]+/,lookbehind:!0},string:/(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\))$/,punctuation:/^[\[\]!:]|[<>]/},alias:"url"},bold:{pattern:/(^|[^\\])(\*\*|__)(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^\*\*|^__|\*\*$|__$/}},italic:{pattern:/(^|[^\\])([*_])(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/,lookbehind:!0,inside:{punctuation:/^[*_]|[*_]$/}},url:{pattern:/!?\[[^\]]+\](?:\([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?\)| ?\[[^\]\n]*\])/,inside:{variable:{pattern:/(!?\[)[^\]]+(?=\]$)/,lookbehind:!0},string:{pattern:/"(?:\\.|[^"\\])*"(?=\)$)/}}}}),Prism.languages.markdown.bold.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.italic.inside.url=Prism.util.clone(Prism.languages.markdown.url),Prism.languages.markdown.bold.inside.italic=Prism.util.clone(Prism.languages.markdown.italic),Prism.languages.markdown.italic.inside.bold=Prism.util.clone(Prism.languages.markdown.bold); // prettier-ignore
 
+const convertContentToString = (content: any) => {
+  let text = "";
+  for (const item of content) {
+    text += item.children[0].text;
+  }
+  return text;
+};
+
+const postStandup = async (slug: string) => {
+  const session = await getSession();
+  const id = btoa(session.user.email);
+  const response = await Get(`/scratchpad/${id}`);
+  const content = response.data[id];
+  const convertedContent = convertContentToString(JSON.parse(content));
+  console.log(convertedContent);
+  const standupResponse = await Post(
+    { text: convertedContent },
+    `/github/standup/${slug}/${session.accessToken}`
+  );
+  console.log(standupResponse);
+};
+
 const saveScratchpad = async (id) => {
   const content = await localStorage.getItem("content");
   const response = await Post({ text: content }, `/scratchpad/${id}`);
   console.log(response);
 };
 
+const initialValue = [
+  {
+    type: "paragraph",
+    children: [{ text: "**What did you achieve in the last 24 hours?**:" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- First" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- Second" }],
+  },
+  {
+    type: "paragraph",
+    children: [
+      { text: "**What are your priorities for the next 24 hours?**:" },
+    ],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- First" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- Second" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "**Blockers**:" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- First" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- Second" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "**Shoutouts**:" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- First" }],
+  },
+  {
+    type: "paragraph",
+    children: [{ text: "- Second" }],
+  },
+];
+
 const Scratchpad = () => {
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [session, loading] = useSession();
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      type: "paragraph",
-      children: [
-        { text: "# Standup Notes" },
-        { text: "\npsst (you can edit everything here)" },
-        {
-          text: "\n**What did you achieve in the last 24 hours?**:",
-        },
-        { text: "\n- First" },
-        { text: "\n- Second" },
-        { text: "\n**What are your priorities for the next 24 hours?**:" },
-        { text: "\n- First" },
-        { text: "\n- Second" },
-        {
-          text: "\n**Blockers**:",
-        },
-        { text: "\n- First" },
-        { text: "\n- Second" },
-        {
-          text: "\n**Shoutouts**:",
-        },
-        { text: "\n- First" },
-        { text: "\n- Second" },
-      ],
-    },
-  ]);
+  const [podList, setPodList] = useState([]);
+  const [value, setValue] = useState<Descendant[]>(initialValue);
   const notify = () => toast("Saved");
   const decorate = useCallback(([node, path]) => {
     const ranges = [];
@@ -100,7 +158,14 @@ const Scratchpad = () => {
       }
     }
 
+    async function getPods() {
+      const session = await getSession();
+      const response = await Get(`/github/list-pods/${session.accessToken}`);
+      setPodList(response.data);
+    }
+
     getScratchpad();
+    getPods();
   }, []);
 
   return (
@@ -122,16 +187,33 @@ const Scratchpad = () => {
           placeholder="Write some markdown..."
         />
       </Slate>
-      <Button
-        colorScheme="gray"
-        marginTop={5}
-        onClick={async () => {
-          await saveScratchpad(btoa(session.user.email));
-          notify();
-        }}
-      >
-        Save
-      </Button>
+      <HStack marginTop={5}>
+        <Button
+          colorScheme="gray"
+          onClick={async () => {
+            await saveScratchpad(btoa(session.user.email));
+            notify();
+          }}
+        >
+          Save
+        </Button>
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            colorScheme="blue"
+          >
+            Submit Standup to:
+          </MenuButton>
+          <MenuList>
+            {podList.map((pod) => (
+              <MenuItem key={pod.slug} onClick={() => postStandup(pod.slug)}>
+                {pod.name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+      </HStack>
       <ToastContainer />
     </>
   );
